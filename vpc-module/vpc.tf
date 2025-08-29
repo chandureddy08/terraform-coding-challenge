@@ -67,3 +67,23 @@ resource "aws_nat_gateway" "nat" {
         }
     )
 }
+
+resource "aws_route_table" "public" {
+    vpc_id = aws_vpc.main.id
+    tags = merge(
+        var.common_tags,
+        {
+             Name = "${var.task_name}-public-rt"
+        }
+)
+}
+
+resource "aws_route_table" "private" {
+    vpc_id = aws_vpc.main.id
+    tags = merge(
+        var.common_tags,
+        {
+            Name = "${var.task_name}-private-rt"
+        }
+  )
+}
