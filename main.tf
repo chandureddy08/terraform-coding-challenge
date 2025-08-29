@@ -6,3 +6,30 @@ module "vpc" {
     private_subnet_cidrs = var.private_subnet_cidrs
     common_tags = var.common_tags
 }
+
+resource "aws_security_group" "nginx" {
+  name        = "${var.task_name}-nginx-sg"
+  description = "Allow HTTP access"
+  vpc_id      = module.vpc.vpc_id
+  
+  ingress {
+    description = "Allow HTTP"
+    from_port   = 80
+    to_port     = 80
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+  egress {
+    description = "Allow all outbound"
+    from_port = 0
+    to_port = 0
+    protocol = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+  tags = merge(
+        var.common_tags,
+        {
+            Name = "${var.task_name}-nginx-sg"
+        }
+    )
+}
