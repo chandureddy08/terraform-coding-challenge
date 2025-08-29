@@ -33,3 +33,19 @@ resource "aws_security_group" "nginx" {
         }
     )
 }
+
+resource "aws_instance" "nginx" {
+    ami = data.aws_ami.rhel9.id
+    instance_type = var.instance_type
+    user_data = file("nginx.sh")
+    subnet_id = module.vpc.public_subnet_id_one
+    vpc_security_group_ids = [aws_security_group.nginx.id]
+    associate_public_ip_address = true
+
+    tags = merge(
+        var.common_tags,
+        {
+            Name = "${var.task_name}-ec2"
+        }
+    )
+}

@@ -37,3 +37,9 @@ variable "common_tags" {
     }
     description = "Common tags to apply to all resources"
 }
+
+variable "instance_type" {
+    type = string
+    default = "t3.micro"
+    description = "Instance type for nginx server"
+}
